@@ -1,0 +1,22 @@
+*{
+  margin: 0;
+  padding:0;
+  box-sizing: border-box;
+  font-family: Gilroy;
+}
+html,body{
+  width: 100%;
+  height: 100%;
+}
+#bulb{
+  height: 300px;
+  width: 300px;
+  border-radius: 50%;
+  border: 4px solid#000;
+  background-color: yellow;
+}
+#button{
+  padding: 10px 40px;
+  font-size: 20px;
+  margin: 80px;
+}
