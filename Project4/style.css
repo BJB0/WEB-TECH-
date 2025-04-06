@@ -1,0 +1,53 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+  font-family: gilroy;
+}
+html,body{
+  height: 100%;
+  width:100%;
+}
+body{
+  background-color: #111;
+  padding: 20px;
+}
+
+#box{
+  background-color: crimson;
+  height: 300px;
+  width: 300px;
+  border-radius: 10px;
+  position: absolute;
+
+  animation-name: bhargab;
+  animation-duration: 3s;
+  animation-delay: 1s;
+  animation-fill-mode: backwards;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: ease-in-out;
+  
+}
+
+@keyframes bhargab {
+  0%{
+    left: 0;
+    top: 0;
+    background-color: crimson;
+
+  }
+  50%{
+    left: 75%;
+    top: 0;
+    background-color: rgb(0, 128, 96);
+
+  }
+  100%{
+    left:75%;
+    top:50%;
+    background-color: blueviolet;
+  }
+  
+  
+}
