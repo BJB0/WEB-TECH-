@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hostel Room Allocation</title>
+    <style>
+        .room-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .room {
+            padding: 10px;
+            color: white;
+            font-weight: bold;
+            width: 150px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .vacant {
+            background-color: green;
+        }
+
+        .full {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <h2>Room Availability</h2>
+    <div id="rooms" class="room-container"></div>
+
+    <h2>Allocate Room</h2>
+    <form id="allocationForm">
+        <label>Name: <input type="text" id="name" required></label><br><br>
+        <label>Student ID: <input type="text" id="student_id" required></label><br><br>
+        <label>Room:
+            <select id="roomSelect" required></select>
+        </label><br><br>
+        <button type="submit">Allocate</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+        let roomsData = [];
+
+        function loadRooms() {
+            fetch('http://localhost/WT_LAB/Hostel_Allocation_system/get_room.php')
+                .then(res => res.json())
+                .then(data => {
+                    roomsData = data;
+                    const roomList = document.getElementById('rooms');
+                    const roomSelect = document.getElementById('roomSelect');
+                    roomList.innerHTML = '';
+                    roomSelect.innerHTML = '<option value="">-- Select Room --</option>';
+
+                    data.forEach(room => {
+                        // Visual box
+                        const div = document.createElement('div');
+                        div.className = `room ${room.status}`;
+                        div.textContent = `Room ${room.room_number} (${room.occupants}/${room.capacity})`;
+                        roomList.appendChild(div);
+
+                        // Dropdown option (only if vacant)
+                        if (room.status === 'vacant') {
+                            const option = document.createElement('option');
+                            option.value = room.id;
+                            option.textContent = `Room ${room.room_number}`;
+                            roomSelect.appendChild(option);
+                        }
+                    });
+                });
+        }
+
+        document.getElementById('allocationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const student_id = document.getElementById('student_id').value;
+            const room_id = document.getElementById('roomSelect').value;
+
+            fetch('http://localhost/WT_LAB/Hostel_Allocation_system/allocate_room.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, student_id, room_id })
+            })
+            .then(res => res.json())
+            .then(response => {
+                document.getElementById('message').textContent = response.message;
+                loadRooms(); // Refresh room status
+                if (response.success) {
+                    document.getElementById('allocationForm').reset();
+                }
+            });
+        });
+
+        loadRooms();
+    </script>
+</body>
+</html>
